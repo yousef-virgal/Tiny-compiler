@@ -28,7 +28,7 @@ class Lexer:
     #send an error with a message indicating the chracter that caused it
     def abort(self, message):
         sys.exit("scanner error :" + message)
-    #skip comments until...
+    #skip comments ethier /**/ or //
     def skipComments(self):
         if self.currentChar == '/':
             if self.peak() == '*':
@@ -44,15 +44,17 @@ class Lexer:
                 while self.currentChar != '\n':
                     self.nxtChar()
                 return
-    
+    # moves skips all whitespaces and tabs untill it reaches a chrachter or a number 
     def skipWhitSpaces(self):
         while self.currentChar == " " or self.currentChar == '\t' or self.currentChar == '\r':
             self.nxtChar()
     #return the next token that appears  
     def getToken(self):
+        #skip white spaces and comments
         self.skipWhitSpaces()
         self.skipComments()
         token = None
+        # single charcters
         if self.currentChar == '\0':
             token = Token(Tokens.EOF,self.currentChar)
         elif self.currentChar == '\n':
@@ -78,68 +80,86 @@ class Lexer:
         elif self.currentChar == ';':
             token = Token(Tokens.SEMICOLON,self.currentChar)
         elif self.currentChar == '=':
-            token = Token(Tokens.COMAPRE,"==") #token.tokenText might be  = or == dependes on implmentation of parser and emiter
+            token = Token(Tokens.COMAPRE,self.currentChar) #token.tokenText might be  = or == dependes on implmentation of parser and emiter
 
+        # multiple charchters such as >= and <= ...
 
+        #for charchter >=
         elif self.currentChar == '>':
             cur = self.currentChar
             if self.peak() == '=':
                 self.nxtChar()
                 token = Token(Tokens.GTEQ,cur+self.currentChar)
             else:
+                # evaluates to >
                 token = Token(Tokens.GT,self.currentChar)
+        
+        #for charchters <=
         elif self.currentChar == '<':
             cur  = self.currentChar
             if self.peak() == '=':
                 self.nxtChar()
                 token = Token(Tokens.LTEQ,cur+self.currentChar)
             else:
+                #evalutes <
                 token = Token(Tokens.LT,self.currentChar)
+        #for charchter !=
         elif self.currentChar == '!':
             cur  = self.currentChar
             if self.peak() == '=':
                 self.nxtChar()
                 token = Token(Tokens.NOTEQ,cur+self.currentChar)
             else:
+                # will abort as ! isnt supported
                 self.abort(self.currentChar)
+        
+        #for charchter :=
         elif self.currentChar == ':':
             cur = self.currentChar
             if self.peak() == '=':
                 self.nxtChar()
-                token = Token(Tokens.ASSIGN,'=') #again can be  = or := dependes on the implmentation of parser and emiter
+                token = Token(Tokens.ASSIGN,cur + self.currentChar) #again can be  = or := dependes on the implmentation of parser and emiter
             else:
+                # abort as the charchter : isnt supported
                 self.abort("unknown symbol - charchter "+ self.currentChar) 
         
+        #for sting ex: "this is a string"
         elif self.currentChar == '\"':
             start = self.currentPostion
             while self.currentChar != '\"':
+                #dont allow special chatcters in the string
+                if self.currentChar == '\t' or self.currentChar == '\n' or self.currentChar == '\\':
+                    self.abort(self.currentChar + " is not suported in side of string")
                 self.nxtChar()
             string = self.sourceCode[start:self.currentPostion]
             token = Token(Tokens.STRING,string)
 
+        #for identfiers and special charchters
         elif self.currentChar.isalpha():
             start = self.currentPostion
             while self.peak().isalnum():
                 self.nxtChar()
             text = self.sourceCode[start:self.currentPostion+1]
-            kind = Token.checkIfKeyword(text.upper()) 
+            kind = Token.checkIfKeyword(text.upper()) # returns none if the charchter isnt special else returns the charchter type
             if kind == None:
                 token = Token(Tokens.IDENT,text)
             else:
                 token = Token(kind,text)
-
+        # for numbers could be intgers and floats
         elif self.currentChar.isdigit():
             start = self.currentPostion
             while self.peak().isdigit():
                 self.nxtChar()
-            if self.peak() == '.':
+            if self.peak() == '.': # check if a . exists for float numbers
                 self.nxtChar()
-                while self.peak().isdigit():
+                while self.peak().isdigit(): # loop to find digits after the . charchter
                     self.nxtChar()
                 token = Token(Tokens.NUMBER,self.sourceCode[start:self.currentPostion+1])
             else:
                 token = Token(Tokens.NUMBER,self.sourceCode[start:self.currentPostion+1])
+        
+        #abort if chrachter doesnt match anything 
         else:
-            self.abort("unknown symbol - charchter "+ self.currentChar)
+            self.abort("unknown symbol - charchter "+ self.currentChar) 
         self.nxtChar()
         return token
