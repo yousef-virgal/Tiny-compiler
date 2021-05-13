@@ -77,7 +77,31 @@ class Lexer:
             token = Token(Tokens.RIGHTPRAN,self.currentChar)
         elif self.currentChar == ';':
             token = Token(Tokens.SEMICOLON,self.currentChar)
+        elif self.currentChar == '=':
+            token = Token(Tokens.COMAPRE,"==") #token.tokenText might be  = or == dependes on implmentation of parser and emiter
+
+        elif self.currentChar == '>':
+            cur = self.currentChar
+            if self.peak() == '=':
+                self.nxtChar()
+                token = Token(Tokens.GTEQ,cur+self.currentChar)
+            else:
+                token = Token(Tokens.GT,self.currentChar)
+        elif self.currentChar == '<':
+            cur  = self.currentChar
+            if self.peak() == '=':
+                self.nxtChar()
+                token = Token(Tokens.LTEQ,cur+self.currentChar)
+            else:
+                token = Token(Tokens.LT,self.currentChar)
+        elif self.currentChar == '!':
+            cur  = self.currentChar
+            if self.peak() == '=':
+                self.nxtChar()
+                token = Token(Tokens.NOTEQ,cur+self.currentChar)
+            else:
+                self.abort(self.currentChar)
         else:
-            self.abort("unknown symbol - charchter"+ self.currentChar)
+            self.abort("unknown symbol - charchter "+ self.currentChar)
         self.nxtChar()
         return token
