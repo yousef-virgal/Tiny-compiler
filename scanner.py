@@ -80,6 +80,7 @@ class Lexer:
         elif self.currentChar == '=':
             token = Token(Tokens.COMAPRE,"==") #token.tokenText might be  = or == dependes on implmentation of parser and emiter
 
+
         elif self.currentChar == '>':
             cur = self.currentChar
             if self.peak() == '=':
@@ -101,6 +102,42 @@ class Lexer:
                 token = Token(Tokens.NOTEQ,cur+self.currentChar)
             else:
                 self.abort(self.currentChar)
+        elif self.currentChar == ':':
+            cur = self.currentChar
+            if self.peak() == '=':
+                token = Token(Tokens.ASSIGN,'=') #again can be  = or := dependes on the implmentation of parser and emiter
+            else:
+                self.abort("unknown symbol - charchter "+ self.currentChar) 
+        
+        elif self.currentChar == '\"':
+            start = self.currentPostion
+            while self.currentChar != '\"':
+                self.nxtChar()
+            string = self.sourceCode[start:self.currentPostion]
+            token = Token(Tokens.STRING,string)
+
+        elif self.currentChar.isalpha():
+            start = self.currentPostion
+            while self.peak().isalnum():
+                self.nxtChar()
+            string = self.sourceCode[start:self.currentPostion+1]
+            kind = Tokens.checkIfKeyword(string) 
+            if kind == None:
+                token = Token(Tokens.IDENT,string)
+            else:
+                token = Tokens(kind,string)
+
+        elif self.currentChar.isdigit():
+            start = self.currentPostion
+            while self.peak().isdigit():
+                self.nxtChar()
+            if self.peak() == '.':
+                self.nxtChar()
+                while self.peak().isdigit():
+                    self.nxtChar()
+                token = Token(Tokens.NUMBER,self.sourceCode[start:self.currentPostion+1])
+            else:
+                token = Token(Tokens.NUMBER,self.sourceCode[start:self.currentPostion+1])
         else:
             self.abort("unknown symbol - charchter "+ self.currentChar)
         self.nxtChar()
