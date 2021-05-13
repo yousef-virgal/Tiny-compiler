@@ -105,6 +105,7 @@ class Lexer:
         elif self.currentChar == ':':
             cur = self.currentChar
             if self.peak() == '=':
+                self.nxtChar()
                 token = Token(Tokens.ASSIGN,'=') #again can be  = or := dependes on the implmentation of parser and emiter
             else:
                 self.abort("unknown symbol - charchter "+ self.currentChar) 
@@ -120,12 +121,12 @@ class Lexer:
             start = self.currentPostion
             while self.peak().isalnum():
                 self.nxtChar()
-            string = self.sourceCode[start:self.currentPostion+1]
-            kind = Tokens.checkIfKeyword(string) 
+            text = self.sourceCode[start:self.currentPostion+1]
+            kind = Token.checkIfKeyword(text.upper()) 
             if kind == None:
-                token = Token(Tokens.IDENT,string)
+                token = Token(Tokens.IDENT,text)
             else:
-                token = Tokens(kind,string)
+                token = Token(kind,text)
 
         elif self.currentChar.isdigit():
             start = self.currentPostion

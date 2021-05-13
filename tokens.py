@@ -4,8 +4,8 @@ class Token:
         self.tokenKind = tokenKind
         self.tokenText = tokenText
     @staticmethod
-    def checkIfKeyword(string):
+    def checkIfKeyword(text):
         for word in Tokens:
-            if string == word.name and word.value>=100 and word.value<=200:
+            if text == word.name and word.value>=100 and word.value<=200:
                 return word
         return None 

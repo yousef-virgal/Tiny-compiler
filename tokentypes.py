@@ -1,6 +1,6 @@
-import enum
+from enum import Enum
 
-class Tokens(enum.Enum):
+class Tokens(Enum):
     #data values and identfier
     EOF = -1
     NEWLINE = 0
