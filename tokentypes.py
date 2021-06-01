@@ -14,9 +14,9 @@ class Tokens(Enum):
     ELSE = 104
     RETURN  = 105
     END  = 107
-    MAIN = 108
-    INT = 109
-    REAL = 110
+    #MAIN = 108
+    #INT = 109
+    #REAL = 110
     THEN = 111
     REPEAT = 112
     UNTIL = 113
@@ -31,8 +31,8 @@ class Tokens(Enum):
     NOTEQ = 206
     COMAPRE = 207
     #symbols
-    LEFTPRAN = 301
-    RIGHTPRAN = 302
+    #LEFTPRAN = 301
+    #RIGHTPRAN = 302
     PLUS = 303
     MINUS = 304
     ASTRIX = 306

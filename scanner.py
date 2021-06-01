@@ -44,6 +44,12 @@ class Lexer:
                 while self.currentChar != '\n':
                     self.nxtChar()
                 return
+        if self.currentChar == "{":
+            self.nxtChar()
+            while self.currentChar != "}":
+                self.nxtChar()
+            self.nxtChar()
+            return
     # moves skips all whitespaces and tabs untill it reaches a chrachter or a number 
     def skipWhitSpaces(self):
         while self.currentChar == " " or self.currentChar == '\t' or self.currentChar == '\r':
@@ -73,10 +79,10 @@ class Lexer:
             token = Token(Tokens.LEPRAC,self.currentChar)
         elif self.currentChar == ')':
             token = Token(Tokens.RIPRAC,self.currentChar)
-        elif self.currentChar == '{':
-            token = Token(Tokens.LEFTPRAN,self.currentChar)
-        elif self.currentChar == '}':
-            token = Token(Tokens.RIGHTPRAN,self.currentChar)
+        #elif self.currentChar == '{':
+        #    token = Token(Tokens.LEFTPRAN,self.currentChar)
+        #elif self.currentChar == '}':
+        #    token = Token(Tokens.RIGHTPRAN,self.currentChar)
         elif self.currentChar == ';':
             token = Token(Tokens.SEMICOLON,self.currentChar)
         elif self.currentChar == '=':
@@ -125,6 +131,7 @@ class Lexer:
         
         #for sting ex: "this is a string"
         elif self.currentChar == '\"':
+            self.nxtChar()
             start = self.currentPostion
             while self.currentChar != '\"':
                 #dont allow special chatcters in the string
