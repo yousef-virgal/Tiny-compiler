@@ -1,7 +1,10 @@
-write "this is a counter";
-x := 10;
-repeat
-write x;
-x:= x-1;
-until x<5
-write "done";
+read x ;
+if x > 0 then {dont compute stuff}
+    fact := 1;
+    repeat 
+        fact := fact*x;
+        x:=x-1;
+    until x=0
+    write fact;
+end
+

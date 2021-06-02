@@ -8,6 +8,7 @@ class Lexer:
         self.size = len(self.sourceCode)
         self.currentChar = ""
         self.currentPostion = -1
+        self.tokenList = []
         self.nxtChar()
 
     #consume the next charcter of the source code untill you rach the end of the code
@@ -64,7 +65,7 @@ class Lexer:
         if self.currentChar == '\0':
             token = Token(Tokens.EOF,self.currentChar)
         elif self.currentChar == '\n':
-            token = Token(Tokens.NEWLINE,self.currentChar)
+            token = Token(Tokens.NEWLINE,"NEW LINE")
         elif self.currentChar == '+':
             token = Token(Tokens.PLUS,self.currentChar)
         elif self.currentChar == '-':
@@ -129,7 +130,7 @@ class Lexer:
                 # abort as the charchter : isnt supported
                 self.abort("unknown symbol - charchter "+ self.currentChar) 
         
-        #for sting ex: "this is a string"
+        #for string ex: "this is a string"
         elif self.currentChar == '\"':
             self.nxtChar()
             start = self.currentPostion
@@ -169,4 +170,5 @@ class Lexer:
         else:
             self.abort("unknown symbol - charchter "+ self.currentChar) 
         self.nxtChar()
+        self.tokenList.append(token)
         return token
