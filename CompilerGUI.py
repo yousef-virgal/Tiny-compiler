@@ -66,15 +66,12 @@ def main(text):
 def showError_Popup(errorType):
     show = P() 
     popupWindow = Popup(title="Error", content=show, size_hint=(None,None),size=(400,400)) 
-    print("error type weslt")
     app = App.get_running_app()
     if(errorType == 1 ):
         app.cError.text = "Scanner Error"
     elif(errorType == 2):
         app.goCButton.disabled = True
-        print("error type search to id")
         app.cError.text = "Parser Error"
-        print("error type search to id done")
     popupWindow.open() 
 class CompilerLayout(Screen):
     
@@ -85,7 +82,6 @@ class CompilerLayout(Screen):
         count = 0
         response = main((self.ids.tinyCode.text))
         if(not isinstance(response,int)):
-            print("o7a")
             response,tokenTableResponse = main(self.ids.tinyCode.text)
         app = App.get_running_app()
         app.goCButton.disabled = False
@@ -136,7 +132,7 @@ class P(BoxLayout):
         #print("ASSIGNED")
         app = App.get_running_app()
         app.cError = self.ids.errorLabel
-        print(app.cError.text)
+        #print(app.cError.text)
 class Code(Screen):
     
     def __init__(self, **kw):

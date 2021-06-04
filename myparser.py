@@ -34,6 +34,7 @@ class Parser:
     def match(self, kind):
         if not self.checkToken(kind):
             self.abort("Expected " + kind.name + ", got " + self.curToken.tokenKind.name)
+            return
         self.nextToken()   
 
     def nextToken(self):
@@ -51,7 +52,7 @@ class Parser:
             self.nextToken()
 
         #main loop for checking staments
-        while not self.checkToken(Tokens.EOF):
+        while not self.checkToken(Tokens.EOF) and not self.error:
             self.statment()
         #needed for any c program    
         self.emiter.emitLine("return 0 ;")
@@ -85,6 +86,9 @@ class Parser:
             self.nlPlus()
             self.emiter.emitLine("){")
             while not self.checkToken(Tokens.END):
+                if self.checkToken(Tokens.EOF):
+                    self.abort("infinte loop")
+                    return 
                 self.statment()
             self.match(Tokens.END)
             self.emiter.emitLine("}")
@@ -96,6 +100,9 @@ class Parser:
             self.emiter.emitLine("do\n{")
             self.nl()
             while not self.checkToken(Tokens.UNTIL):
+                if self.checkToken(Tokens.EOF):
+                    self.abort("infinte loop")
+                    return 
                 self.statment()
             self.emiter.emitLine("}")
             self.match(Tokens.UNTIL)
@@ -162,6 +169,7 @@ class Parser:
             print("Step 2")
         else :
             self.abort("Invalid statement at " + self.curToken.tokenText + " (" + self.curToken.tokenKind.name + ")")
+            return
         self.nl()
 
 
@@ -175,8 +183,10 @@ class Parser:
             self.nextToken()
             self.expersion()
         else:
-            self.abort("Expected comparison operator at: " + self.curToken.text)
+            self.abort("Expected comparison operator at: " + self.curToken.tokenText)
+            # return 
         while self.checkComparison():
+            print("yo")
             if self.checkToken(Tokens.COMAPRE):
                 self.emiter.emit(" == ")
             else:
@@ -219,10 +229,12 @@ class Parser:
         elif self.checkToken(Tokens.IDENT):
             if self.curToken.tokenText not in self.symbols:
                 self.abort("Referencing variable before assignment: " + self.curToken.tokenText)
+                # return
             self.emiter.emit(self.curToken.tokenText)
             self.nextToken()
         else:
             self.abort("Unexpected token at " + self.curToken.tokenText)
+            return
     
     def nlPlus(self):
         self.match(Tokens.NEWLINE)

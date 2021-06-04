@@ -178,6 +178,6 @@ class Lexer:
         self.nxtChar()
         self.tokenList.append(token)
         if(not self.error):
-            print(token.tokenText)
+            #print(token.tokenText)
             return token
         
