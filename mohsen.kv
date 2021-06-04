@@ -1,0 +1,102 @@
+<MyBoxLayout>:
+    canvas:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 0.5
+        Rectangle: #woohoo!!!
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        size:root.width,root.height
+        padding:'25dp'
+        spacing:10
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint:(1,0.15)
+            Button:
+                text: 'Export'
+                pos_hint:{'top':1}
+            ToggleButton:
+                id: clearButtonID
+                text: 'Clear'
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+            ToggleButton:
+                id:node_button
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                Image:
+                    pos_hint_y : None
+                    source: 'node.png'
+                    center_y: (self.parent.y + self.parent.height/2)
+                    center_x: self.parent.x + self.parent.width/2
+                    size: 25,25
+                    allow_stretch: True
+
+            ToggleButton:
+                id:rightArrowID
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                Image:
+                    pos_hint_y : None
+                    source: 'right-arrow.png'
+                    center_y: (self.parent.y + self.parent.height/2)
+                    center_x: self.parent.x + self.parent.width/2
+                    size: 25,25
+                    allow_stretch: True
+            Button:
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                Image:
+                    pos_hint_y : None
+                    source: 'reversed-arrow.png'
+                    center_y: (self.parent.y + self.parent.height/2)
+                    center_x: self.parent.x + self.parent.width/2
+                    size: 25,25
+                    allow_stretch: True
+            Button:
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                Image:
+                    pos_hint_y : None
+                    source: 'right-arrow.png'
+                    center_y: (self.parent.y + self.parent.height/2)
+                    center_x: self.parent.x + self.parent.width/2
+                    size: 25,25
+                    allow_stretch: True
+                    
+            Spinner:
+                id: algorithm_spinner
+                text:'Algorithm: '
+                values: ["A*","Greedy","Breadth first search","Depth first search","Uniformed cost search"]
+                pos_hint:{'top':1}
+                size_hint:(0.3,0.5)
+                on_text: root.spinner_clicked(algorithm_spinner.text)
+            Button:
+                spacing:5
+                text: 'Run'
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                on_press:print(self.parent.y + self.parent.height/2)
+
+                Image:
+                    pos_hint_y : None
+                    source: 'play-button.png'
+                    center_y: (self.parent.y + self.parent.height/2)
+                    center_x: self.parent.x + self.parent.width/1.45
+                    size: 15,15
+                    allow_stretch: True
+            Button:
+                text:'reset'
+                pos_hint:{'top':1}
+                size_hint:(0.15,0.5)
+                on_press:root.clearStuff()
+        FloatLayout:
+            size_hint:(1,0.85)
+            id:canvasID
+            canvas:
+                Color:
+                    rgba: 1,1,1,1
+                Rectangle: #woohoo!!!
+                    size: self.size
+                    pos: self.pos
